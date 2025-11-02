@@ -6,12 +6,15 @@ import { Disclaimer } from './components/Disclaimer';
 import { analyzeSkinCondition } from './services/geminiService';
 import type { AnalysisResponse } from './types';
 import { Logo } from './components/icons/Logo';
+import { ThreeDotsIcon } from './components/icons/ThreeDotsIcon';
+import { ShareModal } from './components/ShareModal';
 
 const App: React.FC = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
 
   const resetState = () => {
     setAnalysisResult(null);
@@ -60,11 +63,23 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col items-center p-4 sm:p-6 lg:p-8">
       <header className="w-full max-w-4xl text-center mb-8">
-        <div className="flex items-center justify-center gap-3 mb-2">
-            <Logo />
-            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
-                Skin Condition Analyzer
-            </h1>
+        <div className="flex items-center justify-between mb-2">
+            <div className="w-10" aria-hidden="true" />
+            <div className="flex items-center justify-center gap-2 sm:gap-3">
+                <Logo />
+                <h1 className="text-2xl sm:text-4xl font-bold text-slate-900 tracking-tight text-center">
+                    Skin Condition Analyzer
+                </h1>
+            </div>
+            <div className="flex justify-end w-10">
+                <button
+                    onClick={() => setIsShareModalOpen(true)}
+                    className="p-2 rounded-full text-slate-500 hover:bg-slate-200 hover:text-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+                    aria-label="Share this application"
+                >
+                    <ThreeDotsIcon className="w-6 h-6" />
+                </button>
+            </div>
         </div>
         <p className="text-md text-slate-600">
             Upload an image to get an AI-powered analysis.
@@ -122,6 +137,7 @@ const App: React.FC = () => {
         )}
       </main>
 
+      <ShareModal isOpen={isShareModalOpen} onClose={() => setIsShareModalOpen(false)} />
     </div>
   );
 };
