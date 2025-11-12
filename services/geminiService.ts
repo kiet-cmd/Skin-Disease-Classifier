@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import type { AnalysisResponse } from '../types';
 
@@ -28,7 +27,7 @@ const fileToGenerativePart = (base64Data: string) => {
 
 export const analyzeSkinCondition = async (imageBase64: string): Promise<AnalysisResponse> => {
     const imagePart = fileToGenerativePart(imageBase64);
-    const prompt = "Analyze the provided image of a skin condition. Identify the most likely dermatological condition. Your response must be a single, valid JSON object containing two keys: 'diseaseName' and 'description'. Do not include any markdown formatting or any text outside of the JSON object. The 'description' should be a brief, clinical but easy-to-understand summary of the condition.";
+    const prompt = "Analyze the provided image of a skin condition. Identify the most likely dermatological condition. Your response must be a single, valid JSON object. Do not include any markdown formatting or any text outside of the JSON object. The object must contain four keys: 'diseaseNameEN' (the disease name in English), 'diseaseNameVI' (the disease name in Vietnamese), 'descriptionEN' (a brief, clinical but easy-to-understand summary in English), and 'descriptionVI' (the same summary translated into Vietnamese).";
     
     const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
@@ -38,16 +37,24 @@ export const analyzeSkinCondition = async (imageBase64: string): Promise<Analysi
             responseSchema: {
                 type: Type.OBJECT,
                 properties: {
-                    diseaseName: {
+                    diseaseNameEN: {
                         type: Type.STRING,
-                        description: 'The name of the identified skin disease.',
+                        description: 'The name of the identified skin disease in English.',
                     },
-                    description: {
+                    diseaseNameVI: {
                         type: Type.STRING,
-                        description: 'A brief, user-friendly description of the condition.',
+                        description: 'The name of the identified skin disease in Vietnamese.',
+                    },
+                    descriptionEN: {
+                        type: Type.STRING,
+                        description: 'A brief, user-friendly description of the condition in English.',
+                    },
+                    descriptionVI: {
+                        type: Type.STRING,
+                        description: 'A brief, user-friendly description of the condition in Vietnamese.',
                     },
                 },
-                required: ['diseaseName', 'description'],
+                required: ['diseaseNameEN', 'diseaseNameVI', 'descriptionEN', 'descriptionVI'],
             },
         }
     });

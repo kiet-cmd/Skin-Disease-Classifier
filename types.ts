@@ -1,5 +1,6 @@
-
 export interface AnalysisResponse {
-    diseaseName: string;
-    description: string;
+    diseaseNameEN: string;
+    diseaseNameVI: string;
+    descriptionEN: string;
+    descriptionVI: string;
 }

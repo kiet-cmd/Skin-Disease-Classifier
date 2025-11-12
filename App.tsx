@@ -33,7 +33,7 @@ const App: React.FC = () => {
 
       try {
         const analysis = await analyzeSkinCondition(base64Image);
-        if (analysis && analysis.diseaseName) {
+        if (analysis && analysis.diseaseNameEN) {
             setAnalysisResult(analysis);
         } else {
              throw new Error('Analysis failed to return a disease name.');
